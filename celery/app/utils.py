@@ -310,7 +310,10 @@ def filter_hidden_settings(conf):
                 from kombu import Connection
                 return Connection(value).as_uri(mask=mask)
             elif 'backend' in key.lower():
-                return maybe_sanitize_url(value, mask=mask)
+                if ',' not in value:
+                    return maybe_sanitize_url(value, mask=mask)
+                uri1, remainder = value.split(',', 1)
+                return ','.join([maybe_sanitize_url(uri1, mask=mask), remainder])
 
         return value
 
