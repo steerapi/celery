@@ -1,8 +1,11 @@
 from __future__ import absolute_import, unicode_literals
-import pytest
-from pickle import loads, dumps
+
 from datetime import datetime
+from pickle import dumps, loads
+
+import pytest
 from case import Mock, mock
+
 from celery import states
 from celery.exceptions import ImproperlyConfigured
 from celery.utils.objects import Bunch
@@ -66,14 +69,17 @@ class test_CassandraBackend:
         x._connection = True
         session = x._session = Mock()
         execute = session.execute = Mock()
-        execute.return_value = [
-            [states.SUCCESS, '1', datetime.now(), b'', b'']
+        result_set = Mock()
+        result_set.one.return_value = [
+            states.SUCCESS, '1', datetime.now(), b'', b''
         ]
+        execute.return_value = result_set
         x.decode = Mock()
         meta = x._get_task_meta_for('task_id')
         assert meta['status'] == states.SUCCESS
 
-        x._session.execute.return_value = []
+        result_set.one.return_value = []
+        x._session.execute.return_value = result_set
         meta = x._get_task_meta_for('task_id')
         assert meta['status'] == states.PENDING
 
@@ -182,3 +188,15 @@ class test_CassandraBackend:
         }
         with pytest.raises(ImproperlyConfigured):
             mod.CassandraBackend(app=self.app)
+
+    def test_options(self):
+        # Ensure valid options works properly
+        from celery.backends import cassandra as mod
+
+        mod.cassandra = Mock()
+        # Valid options
+        self.app.conf.cassandra_options = {
+            'cql_version': '3.2.1',
+            'protocol_version': 3
+        }
+        mod.CassandraBackend(app=self.app)

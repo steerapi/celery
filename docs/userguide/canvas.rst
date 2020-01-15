@@ -344,7 +344,7 @@ Here's some examples:
 
         >>> add.signature((2, 2), immutable=True)
 
-    There's also a ``.si()`` shortcut for this, and this is the preffered way of
+    There's also a ``.si()`` shortcut for this, and this is the preferred way of
     creating signatures:
 
     .. code-block:: pycon
@@ -355,7 +355,7 @@ Here's some examples:
 
     .. code-block:: pycon
 
-        >>> res = (add.si(2, 2) | add.si(4, 4) | add.s(8, 8))()
+        >>> res = (add.si(2, 2) | add.si(4, 4) | add.si(8, 8))()
         >>> res.get()
         16
 
@@ -882,7 +882,7 @@ an errback to the chord callback:
 .. code-block:: pycon
 
     >>> c = (group(add.s(i, i) for i in range(10)) |
-    ...      xsum.s().on_error(on_chord_error.s()))).delay()
+    ...      xsum.s().on_error(on_chord_error.s())).delay()
 
 .. _chord-important-notes:
 

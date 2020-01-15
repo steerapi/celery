@@ -93,7 +93,7 @@ as this means that they can be set by either instantiation or inheritance.
         active = True
         serializer = 'json'
 
-        def __init__(self, serializer=None):
+        def __init__(self, serializer=None, active=None):
             self.serializer = serializer or self.serializer
 
             # must check for None when value can be false-y
@@ -267,7 +267,7 @@ Module Overview
 
 - celery.concurrency
 
-    Execution pool implementations (prefork, eventlet, gevent, solo).
+    Execution pool implementations (prefork, eventlet, gevent, solo, thread).
 
 - celery.db
 

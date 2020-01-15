@@ -95,7 +95,7 @@ longer version:
 
 .. code-block:: console
 
-    $ ps auxww | grep 'celery worker' | awk '{print $2}' | xargs kill -9
+    $ ps auxww | awk '/celery worker/ {print $2}' | xargs kill -9
 
 .. _worker-restarting:
 
@@ -173,10 +173,10 @@ Node name replacements
 For example, if the current hostname is ``george@foo.example.com`` then
 these will expand to:
 
-- ``--logfile-%p.log`` -> :file:`george@foo.example.com.log`
+- ``--logfile=%p.log`` -> :file:`george@foo.example.com.log`
 - ``--logfile=%h.log`` -> :file:`foo.example.com.log`
 - ``--logfile=%n.log`` -> :file:`george.log`
-- ``--logfile=%d`` -> :file:`example.com.log`
+- ``--logfile=%d.log`` -> :file:`example.com.log`
 
 .. _worker-files-process-index:
 
@@ -244,7 +244,7 @@ Remote control
     commands from the command-line. It supports all of the commands
     listed below. See :ref:`monitoring-control` for more information.
 
-:pool support: *prefork, eventlet, gevent*, blocking:*solo* (see note)
+:pool support: *prefork, eventlet, gevent, thread*, blocking:*solo* (see note)
 :broker support: *amqp, redis*
 
 Workers have the ability to be remote controlled using a high-priority

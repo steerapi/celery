@@ -61,6 +61,12 @@ command:
 
     $ sudo apt-get install rabbitmq-server
 
+Or, if you want to run it on Docker execute this:
+
+.. code-block:: console
+
+    $ docker run -d -p 5672:5672 rabbitmq
+
 When the command completes, the broker will already be running in the background,
 ready to move messages for you: ``Starting rabbitmq-server: SUCCESS``.
 
@@ -79,6 +85,12 @@ the event of abrupt termination or power failures. Detailed information about us
 :ref:`broker-redis`
 
 .. _`Redis`: https://redis.io/
+
+If you want to run it on Docker execute this:
+
+.. code-block:: console
+
+    $ docker run -d -p 6379:6379 redis
 
 Other brokers
 -------------
@@ -271,7 +283,14 @@ original traceback:
 .. code-block:: pycon
 
     >>> result.traceback
-    …
+
+.. warning::
+
+    Backends use resources to store and transmit results. To ensure 
+    that resources are released, you must eventually call 
+    :meth:`~@AsyncResult.get` or :meth:`~@AsyncResult.forget` on 
+    EVERY :class:`~@AsyncResult` instance returned after calling
+    a task.
 
 See :mod:`celery.result` for the complete result object reference.
 
@@ -281,8 +300,8 @@ Configuration
 =============
 
 Celery, like a consumer appliance, doesn't need much configuration to operate.
-It has an input and an output. The input must be connected to a broker, and the output can 
-be optionally connected to a result backend. However, if you look closely at the back, 
+It has an input and an output. The input must be connected to a broker, and the output can
+be optionally connected to a result backend. However, if you look closely at the back,
 there's a lid revealing loads of sliders, dials, and buttons: this is the configuration.
 
 The default configuration should be good enough for most use cases, but there are
@@ -315,7 +334,7 @@ If you're configuring many settings at once you can use ``update``:
 For larger projects, a dedicated configuration module is recommended.
 Hard coding periodic task intervals and task routing options is discouraged.
 It is much better to keep these in a centralized location. This is especially
-true for libraries, as it enables users to control how their tasks behave. 
+true for libraries, as it enables users to control how their tasks behave.
 A centralized configuration will also allow your SysAdmin to make simple changes
 in the event of system trouble.
 
